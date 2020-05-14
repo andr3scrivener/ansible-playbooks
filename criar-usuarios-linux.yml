@@ -1,0 +1,30 @@
+---
+- hosts: servidores_linux
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: Adicionando usuario01
+      user:
+        name: usuario01
+        groups: wheel
+        password: 'saida_gerada_pelo_comando_mkpasswd'
+    - name: Adicionando usuario02
+      user:
+        name: usuario02
+        groups: wheel
+        password: 'saida_gerada_pelo_comando_mkpasswd'
+    - name: Adicionando usuario03
+      user:
+        name: usuario03
+        groups: wheel
+        password: 'saida_gerada_pelo_comando_mkpasswd'
+    - name: Removendo hardening de autenticação por senha no SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication no'
+        line: 'PasswordAuthentication yes'
+    - name: Reiniciando o serviço SSH
+      service:
+        name: sshd
+        state: restarted
